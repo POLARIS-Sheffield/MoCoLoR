@@ -3,6 +3,7 @@ import sigpy as sp
 import scipy.ndimage as ndimage_c
 import numpy as np
 
+import time
 import sys
 sys.path.append("./sigpy_e/")
 import sigpy_e.cfl as cfl 
@@ -43,6 +44,7 @@ parser.add_argument('fname', type=str,
                     help='Prefix of raw data and output(_mrL).')
 args = parser.parse_args()
 
+tStart = time.time()
 #
 res_scale = args.res_scale
 fname = args.fname
@@ -143,3 +145,6 @@ if vent_flag==1:
     svs = np.asarray(svs)
     np.save(os.path.join(fname, 'jac_xdgrasp.npy'), jacs)
     np.save(os.path.join(fname, 'sv_xdgrasp.npy'), svs)
+
+tEnd = time.time()
+logging.info(f'{sys.argv[0]} took {(tEnd - tStart)/60:.2f} min to run.')

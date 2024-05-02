@@ -7,11 +7,11 @@ Created on Fri May 13 23:31:08 2022
 """
 
 import argparse 
-
+import logging
 import sigpy as sp
 import scipy.ndimage as ndimage_c
 import numpy as np
-
+import time
 import sys
 # sys.path.append("./sigpy_mc/")
 import sigpy_e.cfl as cfl 
@@ -63,8 +63,9 @@ if __name__ == '__main__':
     # a set of CFL files, including(kspace, trajectory, and density_compensation_weighting)
     args = parser.parse_args()
 
-
+    tStart = time.time()
     #
+    logging.basicConfig(level=logging.INFO)
     res_scale = args.res_scale
     fname = args.fname
     lambda_lr = args.lambda_lr
@@ -289,3 +290,6 @@ if __name__ == '__main__':
         svs = np.asarray(svs)
         np.save(os.path.join(fname, 'jac_mocolor_vent.npy'), jacs)
         np.save(os.path.join(fname, 'sv_mocolor_vent.npy'), svs)
+
+    tEnd = time.time()
+    logging.info(f'{sys.argv[0]} took {(tEnd - tStart)/60:.2f} min to run.')

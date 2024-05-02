@@ -4,6 +4,7 @@ import sigpy as sp
 import scipy.ndimage as ndimage_c
 import numpy as np
 
+import time
 import sys
 # sys.path.append("./sigpy_mc/")
 import sigpy_e.cfl as cfl 
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     logging.basicConfig(level=logging.INFO)
-
+    tStart = time.time()
     #
     res_scale = args.res_scale
     fname = args.fname
@@ -244,3 +245,5 @@ if __name__ == '__main__':
             np.save(os.path.join(fname, 'jac_lor.npy'), jacs)
             np.save(os.path.join(fname, 'sv_lor.npy'), svs)
         
+    tEnd = time.time()
+    logging.info(f'{sys.argv[0]} took {(tEnd - tStart)/60:.2f} min to run.')

@@ -10,6 +10,8 @@ modified from https://github.com/mikgroup/extreme_mri_data/blob/master/convert_u
 
 import argparse
 import os
+import sys
+import time
 import numpy as np
 import h5py
 import sigpy.mri as mr
@@ -277,7 +279,8 @@ if __name__=='__main__':
     parser.add_argument('--resp_polar', type=float, default = -1, help='Polarization of respiratory motion +1 or -1')
     args = parser.parse_args()
     
-    
+    tStart = time.time()
+
     folder = args.folder
     #h5_file = os.path.join(folder, 'MRI_Raw.h5')
     h5_file = os.path.join(args.h5_file, 'MRI_Raw.h5')
@@ -308,3 +311,7 @@ if __name__=='__main__':
     np.save(os.path.join(folder, 'bksp.npy'), bksp)
     np.save(os.path.join(folder, 'bcoord.npy'), bcoord)
     np.save(os.path.join(folder, 'bdcf.npy'), bdcf)
+
+    tEnd = time.time()
+
+    logging.info(f'{sys.argv[0]} took {(tEnd - tStart)/60:.2f} min to run.')
