@@ -32,7 +32,7 @@ if __name__=='__main__':
 
     # set directories
     im = np.load(input_file)
-    new_dicom_dir = input_file[:-4] + '_dcm'
+    new_dicom_dir = f"{input_file[:-4]}_phase_{phase}_dcm"
     
     dcm_ls = glob.glob(orig_dicom_dir + '/*.dcm')
     # Sort by slice number
@@ -98,7 +98,8 @@ if __name__=='__main__':
     # modified time
     dt = datetime.datetime.now()
 
-    imExport = np.abs(imExport) / np.amax(np.abs(imExport)) * 4095  # 65535
+    if np.amax(np.abs(imExport)) != 0:
+        imExport = np.abs(imExport) / np.amax(np.abs(imExport)) * 4095  # 65535
     imExport = imExport.astype(np.uint16)
 
     # Window and level for the image
@@ -120,7 +121,7 @@ if __name__=='__main__':
         ds.SliceLocation = SliceLocation_original + \
             (im_shape[-1] / 2 - (z + 1)) * spatial_resolution
         ds.ImagePositionPatient = pyd.multival.MultiValue(float, [float(ImagePositionPatient_original[0]), float(
-            ImagePositionPatient_original[1]), ImagePositionPatient_original[2] - (im_shape[-1] / 2 - (z + 1)) * spatial_resolution])
+            ImagePositionPatient_original[1]), ImagePositionPatient_original[2] + (z + 1) * spatial_resolution])
         b = imExport[z, :, :].astype('<u2')
         ds.PixelData = b.T.tobytes()
         #ds.is_little_endian = False
